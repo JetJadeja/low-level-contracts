@@ -1,0 +1,10 @@
+/* Methods */
+
+#define macro ADDRESS_MASK() = takes(1) returns(1) {
+	0x000000000000000000000000ffffffffffffffffffffffffffffffffffffffff
+	and
+}
+
+#define macro NON_PAYABLE(error_location) = takes(0) returns(0) {
+	callvalue <error_location> jumpi
+}
