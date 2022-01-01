@@ -19,3 +19,7 @@
 #define constant TOTAL_SUPPLY_POINTER = FREE_STORAGE_POINTER()
 #define constant ALLOWANCE_LOCATION = FREE_STORAGE_POINTER()
 
+/* Constructor */
+#define macro CONSTRUCTOR() = takes (0) returns (0) {
+    OWNABLE_CONSTRUCTOR()
+}
