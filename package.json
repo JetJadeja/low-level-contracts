@@ -1,0 +1,28 @@
+{
+  "name": "low-level-contracts",
+  "version": "1.0.0",
+  "description": "Ethereum Smart Contracts implemented in raw EVM assembly",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JetJadeja/low-level-contracts.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JetJadeja/low-level-contracts/issues"
+  },
+  "homepage": "https://github.com/JetJadeja/low-level-contracts#readme",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.3",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "chai": "^4.3.4",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.5.2",
+    "hardhat": "^2.8.0",
+    "hardhat-huff": "^1.0.12"
+  }
+}
