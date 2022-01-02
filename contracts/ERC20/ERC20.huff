@@ -3,7 +3,6 @@ Huff ERC20 Implementation
 Based off the original example from the Huff codebase
 */
 
-
 /* Imports */
 #include "./contracts/utils/Ownable.huff"
 
@@ -38,25 +37,31 @@ Based off the original example from the Huff codebase
 
 /* Transfer Macros */
 #define macro TRANSFER_STACK_INIT() = takes (0) returns (1) {
-    caller                           // [from]
-    0x24 calldataload                // [amount, from]
-    TRANSFER_TAKE_FROM()
+    0x24 calldataload                // [amount]
+    caller                           // [from, amount]
+    TRANSFER_TAKE_FROM(balance_too_low)
+
+    balance_too_low:
+        0x00 0x00 revert
 }
 
-#define macro TRANSFER_TAKE_FROM() = takes (6) returns (0) {
-    // Subtract amount from sender's balance
-    // Input stack: [amount, from]
-    dup2   // [from, amount, from]
-    sload  // [balances[from], amount, from]
-    sub    // [balances[from] - amount, from]
-    dup2   // [from, balances[from] - amount, from]
-    sstore // balances[from] = balances[from] - amount
+#define macro TRANSFER_TAKE_FROM(error location) = takes (6) returns (0) {
+    // Get the updated balance of the sender.
+    // Input stack: [from, amount]
+    dup1    // [from, from, amount]
+    sload   // [balance, from, amount]
+    dup3    // [amount, balance, from, amount]
+    dup2    // [balance, amount, balance, from, amount]
+    sub     // [balance - amount, balance, from, amount]
 
-    // Add amount to recipient's balance
-    // Input stack: [amount, 0, 32, signature, to, from]
+    // Ensure the balance is greater than or equal to the amount.
+    swap3 // [amount, balance, from, balance - amount]
+    gt // [amount > balance, from, balance - amount]
+    <error_location> jumpi // Jump to the error location if the balance is too low.
 
-
-
+    // Set the new balanace
+    // Input stack: [from, balance - amount]
+    sstore // Store the new balance in storage
 }
 
 
