@@ -39,20 +39,22 @@ Based off the original example from the Huff codebase
 /* Transfer Macros */
 #define macro TRANSFER_STACK_INIT() = takes (0) returns (1) {
     caller                           // [from]
-    0x04 calldataload ADDRESS_MASK() // [to, from]
-    [TRANSFER_EVENT_SIGNATURE]       // [signature, to, from]
-    0x20                             // [32, signature, to, from]
-    0x00                             // [0, 32, signature, to, from]
-    0x24 calldataload                // [amount, 0, 32, signature, to, from]
+    0x24 calldataload                // [amount, from]
+    TRANSFER_TAKE_FROM()
 }
 
 #define macro TRANSFER_TAKE_FROM() = takes (6) returns (0) {
-    // Input stack: [amount, 0, 32, signature, to, from]
-    dup6  // [from, amount, 0, 32, signature, to, from]
-    sload // [balances[from], amount, 0, 32, signature, to, from] 
-    sub   // [balances[from] - amount, 0, 32, signature, to, from]
-    dup6  // [from, balances[from] - amount, 0, 32, signature, to]
+    // Subtract amount from sender's balance
+    // Input stack: [amount, from]
+    dup2   // [from, amount, from]
+    sload  // [balances[from], amount, from]
+    sub    // [balances[from] - amount, from]
+    dup2   // [from, balances[from] - amount, from]
     sstore // balances[from] = balances[from] - amount
+
+    // Add amount to recipient's balance
+    // Input stack: [amount, 0, 32, signature, to, from]
+
 
 
 }
