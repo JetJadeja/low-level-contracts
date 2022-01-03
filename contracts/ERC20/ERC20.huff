@@ -45,7 +45,7 @@ Based off the original example from the Huff codebase
         0x00 0x00 revert
 }
 
-#define macro TRANSFER_TAKE_FROM(error location) = takes (6) returns (0) {
+#define macro TRANSFER_TAKE_FROM(error location) = takes (2) returns (1) {
     // Get the updated balance of the sender.
     // Input stack: [from, amount]
     dup1    // [from, from, amount]
@@ -64,6 +64,8 @@ Based off the original example from the Huff codebase
     // Input stack: [balance - amount, from, amount]
     swap1        // [from, balance - amount, amount]
     sstore // Store the new balance in storage
+
+    // Output stack: [amount]
 }
 
 #define macro TRANSFER_GIVE_TO() = takes (0) returns (0) {
