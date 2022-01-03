@@ -51,18 +51,24 @@ Based off the original example from the Huff codebase
     dup1    // [from, from, amount]
     sload   // [balance, from, amount]
     dup3    // [amount, balance, from, amount]
-    dup2    // [balance, amount, balance, from, amount]
-    sub     // [balance - amount, balance, from, amount]
+    dup1    // [amount, amount, balance, from, amount]
+    dup3    // [balance, amount, amount, balance, from, amount]
+    sub     // [balance - amount, amount, balance, from, amount]
 
     // Ensure the balance is greater than or equal to the amount.
-    swap3 // [amount, balance, from, balance - amount]
-    gt // [amount > balance, from, balance - amount]
+    swap2   // [balance, amount, balance - amount, from, amount] 
+    lt      // [balance < amount, balance - amount, from, amount] 
     <error_location> jumpi // Jump to the error location if the balance is too low.
 
     // Set the new balanace
-    // Input stack: [from, balance - amount]
+    // Input stack: [balance - amount, from, amount]
+    swap1        // [from, balance - amount, amount]
     sstore // Store the new balance in storage
 }
 
+#define macro TRANSFER_GIVE_TO() = takes (0) returns (0) {
+    // Get the updated balance of the receiver.
+    // Input stack: [to, amount]
 
+}
 
