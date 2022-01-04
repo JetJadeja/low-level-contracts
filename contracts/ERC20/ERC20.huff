@@ -103,3 +103,13 @@ Based off the original example from the Huff codebase
         0x00 0x00 revert
 }
 
+// Main
+#define macro MAIN() = takes(0) returns (0) {
+    // Get the function signature.
+    0x00 calldataload 0xE0 shr
+    dup1 0xa9059cbb eq transfer jumpi
+
+    transfer: 
+        TRANSFER()
+}
+
