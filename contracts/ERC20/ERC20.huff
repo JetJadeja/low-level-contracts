@@ -57,7 +57,7 @@ Based off the original example from the Huff codebase
     sstore // Store the new balance in storage
 }
 
-#define macro TRANSFER_GIVE_TO() = takes (2) returns (0) {
+#define macro TRANSFER_GIVE_TO() = takes (2) returns (2) {
     // Get the updated balance of the receiver.
     // Input stack: [to, amount]
     dup1    // [to, to, amount]
@@ -66,17 +66,36 @@ Based off the original example from the Huff codebase
     add     // [balance + amount, to, amount]
 
     // Set the new balanace
-    dup1    // [to, balance + amount, amount]
+    dup2    // [to, balance + amount, to, amount]
     sstore  // Store the new balance in storage
 }
 
 // TODO: Must keep values on the stack for the event.
-#define macro TRANSFER() = takes (0) returns (1) {
+#define macro TRANSFER() = takes (0) returns (0) {
+    // Transfer the funds.
     0x24 calldataload                   // [amount]
     caller                              // [from, amount]
     TRANSFER_TAKE_FROM(balance_too_low) // [amount]
     0x04 calldataload ADDRESS_MASK()    // [to, amount]
-    TRANSFER_GIVE_TO()                  // [amount]
+    TRANSFER_GIVE_TO()                  // [to, amount]
+
+    // Emit the transfer event.
+    // Input stack: [to, amount]
+    swap1                       // [amount, to]
+    0x00                        // [0, amount, to]
+    mstore                      // [to] (store the transfered amount in memory, since it is not an indexed event parameter)
+    caller                      // [from, to]
+    [TRANSFER_EVENT_SIGNATURE]  // [signature, from, to]
+    0x00                        // [0, signature, from, to]
+    0x20                        // [32, 0, signature, from, to]
+    log3                         // Log the transfer event.
+
+    // Return true.
+    0x01    // [1]
+    0x00    // [0, 1]
+    mstore  // Store the value "1" on the stack
+
+    0x20 0x00 return // Return this value.
 
 
     balance_too_low:
