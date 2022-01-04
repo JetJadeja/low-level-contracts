@@ -20,6 +20,6 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 module.exports = {
   solidity: "0.8.4",
   huff: {
-    version: "latest",
+    version: "0.0.16",
   },
 };
