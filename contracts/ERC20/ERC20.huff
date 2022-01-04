@@ -90,14 +90,14 @@ Based off the original example from the Huff codebase
     0x20                        // [32, 0, signature, from, to]
     log3                         // Log the transfer event.
 
+    // TODO: do we need to store 1 in memory, since the amount is already stored in memory @ 0:32
     // Return true.
     0x01    // [1]
     0x00    // [0, 1]
     mstore  // Store the value "1" on the stack
-
     0x20 0x00 return // Return this value.
 
-
+    // Error locations
     balance_too_low:
         0x00 0x00 revert
 }
