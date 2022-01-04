@@ -39,7 +39,7 @@ Based off the original example from the Huff codebase
 #define macro TRANSFER_TAKE_FROM(error location) = takes (2) returns (1) {
     // Get the updated balance of the sender.
     // Input stack: [from, amount]
-    dup1    // [from, from, amount]
+    caller  // [from, from, amount]
     sload   // [balance, from, amount]
     dup3    // [amount, balance, from, amount]
     dup1    // [amount, amount, balance, from, amount]
