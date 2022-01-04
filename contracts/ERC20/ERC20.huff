@@ -5,6 +5,7 @@ Based off the original example from the Huff codebase
 
 /* Imports */
 #include "./contracts/utils/Ownable.huff"
+#include "./contracts/utils/Utils.huff"
 
 /* Interface */
 #define function mint(uint256) view returns ()
@@ -36,7 +37,7 @@ Based off the original example from the Huff codebase
 }
 
 /* Transfer Macros */
-#define macro TRANSFER_TAKE_FROM(error location) = takes (2) returns (1) {
+#define macro TRANSFER_TAKE_FROM(error) = takes (2) returns (1) {
     // Get the updated balance of the sender.
     // Input stack: [from, amount]
     caller  // [from, from, amount]
@@ -49,7 +50,7 @@ Based off the original example from the Huff codebase
     // Ensure the balance is greater than or equal to the amount.
     swap2   // [balance, amount, balance - amount, from, amount] 
     lt      // [balance < amount, balance - amount, from, amount] 
-    <error_location> jumpi // Jump to the error location if the balance is too low.
+    <error> jumpi // Jump to the error location if the balance is too low.
 
     // Set the new balanace
     // Input stack: [balance - amount, from, amount]
